@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Dhawal Sarin — Full-Stack Software Engineer</title>
-<meta name="description" content="Dhawal Sarin — Full-Stack Software Engineer. React, Node, Python, MongoDB. Building scalable web applications from Mumbai, India." />
+<title>Dhawal Sarin — Full Stack AI Software Engineer</title>
+<meta name="description" content="Dhawal Sarin — Full Stack AI Software Engineer. React, Node, Python, MongoDB. Building scalable web applications from Mumbai, India." />
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -215,9 +215,14 @@
   .work-row{
     display:grid; grid-template-columns:70px 1fr auto; gap:24px; align-items:center;
     padding:34px 0; border-bottom:1px solid var(--line); position:relative; overflow:hidden; cursor:default;
+    --mx:50%; --my:50%;
   }
-  .work-row::before{ content:''; position:absolute; inset:0; background:linear-gradient(90deg, rgba(57,255,157,.06), transparent 60%); transform:scaleX(0); transform-origin:left; transition:transform .5s ease; z-index:0; }
-  .work-row:hover::before{ transform:scaleX(1); }
+  .work-row::before{
+    content:''; position:absolute; inset:0;
+    background:radial-gradient(circle 260px at var(--mx) var(--my), rgba(57,255,157,.1), transparent 70%);
+    opacity:0; transition:opacity .35s ease; z-index:0;
+  }
+  .work-row:hover::before{ opacity:1; }
   .work-idx{ font-family:var(--mono); font-size:13px; color:var(--muted-dim); position:relative; z-index:1; }
   .work-main{ position:relative; z-index:1; }
   .work-top{ display:flex; align-items:center; gap:14px; flex-wrap:wrap; margin-bottom:8px; }
@@ -235,8 +240,9 @@
   }
 
   /* ---------- skills / toolkit ---------- */
-  .skills-cols{ display:grid; grid-template-columns:repeat(4,1fr); gap:40px; }
-  @media (max-width:900px){ .skills-cols{ grid-template-columns:repeat(2,1fr); } }
+  .skills-cols{ display:grid; grid-template-columns:repeat(5,1fr); gap:32px; }
+  @media (max-width:1000px){ .skills-cols{ grid-template-columns:repeat(3,1fr); } }
+  @media (max-width:600px){ .skills-cols{ grid-template-columns:repeat(2,1fr); } }
   .skill-cat-title{ font-family:var(--mono); font-size:12px; color:var(--accent-2); letter-spacing:.05em; margin-bottom:18px; text-transform:uppercase; }
   .skill-cat-title::before{ content:'// '; color:var(--muted-dim); }
   .skill-item{ font-family:var(--mono); font-size:13.5px; color:var(--text); padding:8px 0; border-bottom:1px dashed var(--line); display:flex; justify-content:space-between; }
@@ -317,6 +323,29 @@
 
   .reveal{ opacity:0; transform:translateY(28px); }
 
+  /* ---------- custom cursor ---------- */
+  html.has-custom-cursor, html.has-custom-cursor *{ cursor:none !important; }
+  #cursor-dot, #cursor-ring{
+    position:fixed; top:0; left:0; pointer-events:none; z-index:9999;
+    border-radius:50%; transform:translate(-50%,-50%);
+    mix-blend-mode:difference;
+  }
+  #cursor-dot{ width:6px; height:6px; background:var(--accent); }
+  #cursor-ring{
+    width:38px; height:38px; border:1px solid var(--accent); background:transparent;
+    transition:width .25s ease, height .25s ease, background-color .25s ease, opacity .25s ease;
+  }
+  #cursor-ring.active{ width:64px; height:64px; background:rgba(57,255,157,.12); }
+  #cursor-ring.pressed{ width:30px; height:30px; }
+  #cursor-label{
+    position:fixed; top:0; left:0; pointer-events:none; z-index:9999;
+    transform:translate(-50%,-50%); font-family:var(--mono); font-size:10px;
+    letter-spacing:.08em; color:var(--bg); background:var(--accent);
+    padding:4px 9px; opacity:0; transition:opacity .2s ease; white-space:nowrap;
+  }
+  #cursor-label.active{ opacity:1; }
+  @media (pointer:coarse){ #cursor-dot, #cursor-ring, #cursor-label{ display:none; } }
+
   @media (prefers-reduced-motion: reduce){
     *{ animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important; scroll-behavior:auto !important; }
   }
@@ -337,6 +366,10 @@
 <canvas id="bg-canvas"></canvas>
 <div id="bg-veil"></div>
 
+<div id="cursor-ring"></div>
+<div id="cursor-dot"></div>
+<div id="cursor-label"></div>
+
 <header>
   <div class="nav-main">
     <div class="logo">DS<span>_</span><small>PORTFOLIO / 2026</small></div>
@@ -348,8 +381,8 @@
       <li><a href="#contact" data-nav>05/CONTACT</a></li>
     </ul>
     <div class="nav-right">
-      <a href="#contact" class="nav-cta">GET IN TOUCH</a>
-      <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu"><span></span><span></span></button>
+      <a href="#contact" class="nav-cta" data-cursor-text="GO" data-magnetic>GET IN TOUCH</a>
+      <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu" data-cursor-text="MENU" data-magnetic><span></span><span></span></button>
     </div>
   </div>
   <div class="hud">
@@ -382,7 +415,7 @@
   <section id="hero">
     <div class="hero-inner">
       <div class="hero-tags reveal-hero">
-        <span>Full-Stack Software Engineer</span>
+        <span>Full Stack AI Software Engineer</span>
         <span>Mumbai, India</span>
         <span>Open to remote</span>
       </div>
@@ -512,7 +545,7 @@
       </div>
 
       <div class="work-list reveal">
-        <div class="work-row">
+        <div class="work-row" data-cursor-text="VIEW">
           <div class="work-idx">01</div>
           <div class="work-main">
             <div class="work-top"><span class="work-title">Decipher</span><span class="work-year">2025—2026</span></div>
@@ -523,7 +556,7 @@
             <div class="work-badge"><div class="v">AI</div><div class="l">Whisper Model</div></div>
           </div>
         </div>
-        <div class="work-row">
+        <div class="work-row" data-cursor-text="VIEW">
           <div class="work-idx">02</div>
           <div class="work-main">
             <div class="work-top"><span class="work-title">Accomplishments</span><span class="work-year">2024—2025</span></div>
@@ -534,7 +567,7 @@
             <div class="work-badge"><div class="v">100%</div><div class="l">Revamp</div></div>
           </div>
         </div>
-        <div class="work-row">
+        <div class="work-row" data-cursor-text="VIEW">
           <div class="work-idx">03</div>
           <div class="work-main">
             <div class="work-top"><span class="work-title">Exception Manager 2.0</span><span class="work-year">2024—2025</span></div>
@@ -545,7 +578,7 @@
             <div class="work-badge"><div class="v">AMPS</div><div class="l">Event-Driven</div></div>
           </div>
         </div>
-        <div class="work-row">
+        <div class="work-row" data-cursor-text="VIEW">
           <div class="work-idx">04</div>
           <div class="work-main">
             <div class="work-top"><span class="work-title">Regression 2.0 Dashboard</span><span class="work-year">2022—2024</span></div>
@@ -556,7 +589,7 @@
             <div class="work-badge"><div class="v">-47s</div><div class="l">Load Time</div></div>
           </div>
         </div>
-        <div class="work-row">
+        <div class="work-row" data-cursor-text="VIEW">
           <div class="work-idx">05</div>
           <div class="work-main">
             <div class="work-top"><span class="work-title">Esmart Report</span><span class="work-year">2022—2024</span></div>
@@ -579,7 +612,7 @@
         <div class="eyebrow">$ cat skills.json</div>
         <div class="block-top">
           <h2 class="block-title">Skills <span class="dim">/ 03</span></h2>
-          <div class="section-num">4 CATEGORIES</div>
+          <div class="section-num">5 CATEGORIES</div>
         </div>
       </div>
 
@@ -602,6 +635,12 @@
           <div class="skill-item">MongoDB <span>core</span></div>
           <div class="skill-item">Mongoose <span>core</span></div>
           <div class="skill-item">SQL <span>core</span></div>
+        </div>
+        <div>
+          <div class="skill-cat-title">AI &amp; ML</div>
+          <div class="skill-item">AI Agents <span>applied</span></div>
+          <div class="skill-item">RAG <span>applied</span></div>
+          <div class="skill-item">Vector DBs <span>applied</span></div>
         </div>
         <div>
           <div class="skill-cat-title">Tools &amp; Infra</div>
@@ -643,8 +682,8 @@
           <p class="about-p">Outside of work: gaming, cooking, travelling, and sketching. I'm a <b>4-star coder on CodeChef</b> (rank 1801) — really just an excuse to keep solving problems for fun.</p>
 
           <div class="cta-row">
-            <a class="btn-outline" href="Dhawal_Sarin_Resume.pdf" download>DOWNLOAD RESUME ↓</a>
-            <a class="btn-outline" href="#contact">GET IN TOUCH →</a>
+            <a class="btn-outline" href="Dhawal_Sarin_Resume.pdf" download data-cursor-text="↓" data-magnetic>DOWNLOAD RESUME ↓</a>
+            <a class="btn-outline" href="#contact" data-cursor-text="GO" data-magnetic>GET IN TOUCH →</a>
           </div>
         </div>
 
@@ -695,16 +734,16 @@
       <h2 class="contact-big reveal">Let's build<br>something <span class="accent-word">robust.</span></h2>
 
       <div class="contact-links reveal">
-        <a class="contact-link" href="mailto:dhawal12sarin@gmail.com"><span class="lbl">EMAIL</span>dhawal12sarin@gmail.com</a>
-        <a class="contact-link" href="tel:+919453037837"><span class="lbl">PHONE</span>+91 94530 37837</a>
-        <a class="contact-link" href="https://www.linkedin.com/in/dhawal-sarin-861a3216b" target="_blank" rel="noopener"><span class="lbl">LINKEDIN</span>dhawal-sarin ↗</a>
+        <a class="contact-link" href="mailto:dhawal12sarin@gmail.com" data-cursor-text="EMAIL" data-magnetic><span class="lbl">EMAIL</span>dhawal12sarin@gmail.com</a>
+        <a class="contact-link" href="tel:+919453037837" data-cursor-text="CALL" data-magnetic><span class="lbl">PHONE</span>+91 94530 37837</a>
+        <a class="contact-link" href="https://www.linkedin.com/in/dhawal-sarin-861a3216b" target="_blank" rel="noopener" data-cursor-text="OPEN ↗" data-magnetic><span class="lbl">LINKEDIN</span>dhawal-sarin ↗</a>
       </div>
 
       <form id="msgform" class="reveal" onsubmit="return sendMail(event)">
         <div class="field"><label for="f-name">Name</label><input id="f-name" type="text" required placeholder="Your name" /></div>
         <div class="field"><label for="f-email">Email</label><input id="f-email" type="email" required placeholder="you@company.com" /></div>
         <div class="field"><label for="f-msg">Message</label><textarea id="f-msg" required placeholder="What are you building?"></textarea></div>
-        <button type="submit" class="submit">SEND MESSAGE →</button>
+        <button type="submit" class="submit" data-cursor-text="SEND" data-magnetic>SEND MESSAGE →</button>
         <div class="form-note">OPENS YOUR MAIL CLIENT — OR WRITE DIRECT TO DHAWAL12SARIN@GMAIL.COM</div>
       </form>
     </div>
@@ -834,6 +873,63 @@ function updateScrollReactivity(){
 }
 
 initThree();
+
+/* ---------------- custom cursor ---------------- */
+const isFinePointer = window.matchMedia('(pointer:fine)').matches;
+if(isFinePointer){
+  document.documentElement.classList.add('has-custom-cursor');
+  const dot = document.getElementById('cursor-dot');
+  const ring = document.getElementById('cursor-ring');
+  const label = document.getElementById('cursor-label');
+
+  let mx=innerWidth/2, my=innerHeight/2, rx=mx, ry=my, lx=mx, ly=my;
+  window.addEventListener('mousemove', e=>{ mx=e.clientX; my=e.clientY; });
+  window.addEventListener('mousedown', ()=> ring.classList.add('pressed'));
+  window.addEventListener('mouseup', ()=> ring.classList.remove('pressed'));
+
+  function cursorLoop(){
+    dot.style.left = mx+'px'; dot.style.top = my+'px';
+    rx += (mx-rx)*0.18; ry += (my-ry)*0.18;
+    ring.style.left = rx+'px'; ring.style.top = ry+'px';
+    lx += (mx-lx)*0.22; ly += (my-ly)*0.22;
+    label.style.left = lx+'px'; label.style.top = (ly-38)+'px';
+    requestAnimationFrame(cursorLoop);
+  }
+  cursorLoop();
+
+  const hoverables = document.querySelectorAll('a, button, .work-row, [data-cursor]');
+  hoverables.forEach(el=>{
+    el.addEventListener('mouseenter', ()=>{
+      ring.classList.add('active');
+      const txt = el.getAttribute('data-cursor-text') || el.closest('[data-cursor-text]')?.getAttribute('data-cursor-text');
+      if(txt){ label.textContent = txt; label.classList.add('active'); }
+    });
+    el.addEventListener('mouseleave', ()=>{
+      ring.classList.remove('active');
+      label.classList.remove('active');
+    });
+  });
+
+  /* magnetic buttons */
+  document.querySelectorAll('[data-magnetic]').forEach(el=>{
+    el.addEventListener('mousemove', e=>{
+      const r = el.getBoundingClientRect();
+      const relX = e.clientX - (r.left + r.width/2);
+      const relY = e.clientY - (r.top + r.height/2);
+      el.style.transform = `translate(${relX*0.22}px, ${relY*0.32}px)`;
+    });
+    el.addEventListener('mouseleave', ()=>{ el.style.transform = 'translate(0,0)'; });
+  });
+
+  /* cursor-tracking spotlight on work rows */
+  document.querySelectorAll('.work-row').forEach(row=>{
+    row.addEventListener('mousemove', e=>{
+      const r = row.getBoundingClientRect();
+      row.style.setProperty('--mx', ((e.clientX-r.left)/r.width*100)+'%');
+      row.style.setProperty('--my', ((e.clientY-r.top)/r.height*100)+'%');
+    });
+  });
+}
 
 /* ---------------- gsap scroll reveals ---------------- */
 gsap.registerPlugin(ScrollTrigger);
